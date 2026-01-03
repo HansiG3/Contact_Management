@@ -12,12 +12,12 @@ let db;
 
 connectToDb((err) => {
     if (!err) {
-        app.listen(3000, () => {
-            console.log('App listening on port 3000');
+        app.listen(5000, () => {
+            console.log('App listening on port 5000');
         });
         db = getDb(); // Initialize db after connection is successful
     } else {
         console.log('Database connection error:', err);
     }
 });
-app.use('/api/contact_management', require('./routes/contact'));
+app.use('/api/contacts', require('./routes/contact'));
