@@ -26,7 +26,7 @@ export default function ContactForm({ fetchContacts }) {
     e.preventDefault();
     if (!validate()) return;
 
-    await axios.post("http://localhost:5000/api/contacts", form);
+    await axios.post("https://contact-management-mstm.onrender.com/api/contacts", form);
     setForm({ name: "", email: "", phone: "", message: "" });
     fetchContacts();
   };
