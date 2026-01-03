@@ -10,18 +10,18 @@ app.use(cors());
 
 let db;
 
-// ✅ API routes FIRST
+// API routes
 app.use('/api/contacts', require('./routes/contact'));
 
-// ✅ Serve frontend build (CRA)
+// Serve React build
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// ✅ Fallback for React routing
-app.get('*', (req, res) => {
+// React fallback route (FIXED)
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
-// ✅ Connect DB and start server
+// Start server after DB connection
 connectToDb((err) => {
   if (!err) {
     const PORT = process.env.PORT || 5000;
