@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const { connectToDb, getDb } = require('./db');
@@ -10,14 +10,26 @@ app.use(cors());
 
 let db;
 
-connectToDb((err) => {
-    if (!err) {
-        app.listen(5000, () => {
-            console.log('App listening on port 5000');
-        });
-        db = getDb(); // Initialize db after connection is successful
-    } else {
-        console.log('Database connection error:', err);
-    }
-});
+// ✅ API routes FIRST
 app.use('/api/contacts', require('./routes/contact'));
+
+// ✅ Serve frontend build (CRA)
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// ✅ Fallback for React routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+
+// ✅ Connect DB and start server
+connectToDb((err) => {
+  if (!err) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`App listening on port ${PORT}`);
+    });
+    db = getDb();
+  } else {
+    console.log('Database connection error:', err);
+  }
+});
